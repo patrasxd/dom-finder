@@ -151,16 +151,23 @@
       }
 
       // Location — try to find address-like text in the card
-      // Otodom shows location as a separate line like "ul. X, Dzielnica, Warszawa, mazowieckie"
-      const allText = card.querySelectorAll('p, span, div');
-      allText.forEach(el => {
-        const t = el.textContent?.trim();
-        if (!t) return;
-        // Location pattern: contains city/district names, commas, "mazowieckie" etc.
-        if (t.match(/,.*(?:Warszawa|warszawa|mazowieckie|małopolskie|dolnośląskie|wielkopolskie|pomorskie|śląskie|łódzkie)/i) && !data.location) {
-          data.location = t;
-        }
-      });
+      const addressComponent = card.querySelector('[data-sentry-component="Address"], [class*="address"], p[class*="css-oxb2ca"]');
+      if (addressComponent) {
+        data.location = addressComponent.textContent?.trim() || '';
+      }
+
+      // Fallback: search through all small text elements
+      if (!data.location) {
+        const allText = card.querySelectorAll('p, span, div');
+        allText.forEach(el => {
+          const t = el.textContent?.trim();
+          if (!t || t.length > 80 || t.length < 5) return; // Must be short
+          // Location pattern: contains city/district names, commas
+          if (t.match(/,.*(?:Warszawa|warszawa|Kraków|Wrocław|Poznań|Gdańsk|mazowieckie|małopolskie|dolnośląskie|wielkopolskie|pomorskie|śląskie|łódzkie)/i)) {
+            data.location = t;
+          }
+        });
+      }
 
       // Parameters from card — rooms, area, floor
       const allSpans = card.querySelectorAll('span, dt, dd, li, div');
