@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dom Finder — Ustawienia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <div class="popup-header">
+      <div class="popup-logo">
+        <span class="popup-icon">🏠</span>
+        <div>
+          <h1>Dom Finder</h1>
+          <p class="popup-subtitle">Asystent Nieruchomości AI</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Form -->
+    <form id="settings-form">
+      <!-- API Key -->
+      <div class="form-group">
+        <label for="api-key">
+          <span class="label-icon">🔑</span>
+          Klucz API Groq
+        </label>
+        <div class="input-wrapper">
+          <input type="password" id="api-key" placeholder="gsk_..." autocomplete="off">
+          <button type="button" id="toggle-key" class="btn-icon" title="Pokaż/ukryj klucz">👁</button>
+        </div>
+        <a href="https://console.groq.com/keys" target="_blank" class="help-link">
+          Pobierz darmowy klucz → console.groq.com
+        </a>
+      </div>
+
+      <!-- Destination -->
+      <div class="form-group">
+        <label for="destination">
+          <span class="label-icon">📍</span>
+          Cel dojazdu
+        </label>
+        <input type="text" id="destination" placeholder="Warszawa Centrum" value="Warszawa Centrum">
+      </div>
+
+      <!-- Model Selection -->
+      <div class="form-group">
+        <label for="model">
+          <span class="label-icon">🤖</span>
+          Model AI
+        </label>
+        <select id="model">
+          <option value="llama-3.3-70b-versatile">Llama 3.3 70B (zalecany)</option>
+          <option value="llama-3.1-8b-instant">Llama 3.1 8B (szybszy)</option>
+          <option value="llama3-70b-8192">Llama 3 70B</option>
+          <option value="gemma2-9b-it">Gemma 2 9B</option>
+          <option value="deepseek-r1-distill-llama-70b">DeepSeek R1 70B</option>
+          <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+        </select>
+      </div>
+
+      <!-- Save Button -->
+      <button type="submit" class="btn-save" id="btn-save">
+        <span class="btn-text">Zapisz ustawienia</span>
+        <span class="btn-success" style="display:none">✓ Zapisano!</span>
+      </button>
+    </form>
+
+    <!-- Status -->
+    <div class="popup-status" id="status">
+      <div class="status-dot"></div>
+      <span>Gotowy do użycia</span>
+    </div>
+
+    <!-- Usage Info -->
+    <div class="popup-info">
+      <div class="info-item">
+        <span>🖱️</span>
+        <span>Prawy klik na stronie oferty → <strong>Podsumowanie</strong></span>
+      </div>
+      <div class="info-item">
+        <span>👆</span>
+        <span>Najedź na ofertę na liście → kliknij przycisk</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

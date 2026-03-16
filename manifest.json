@@ -1,0 +1,88 @@
+{
+  "manifest_version": 3,
+  "name": "Dom Finder — Asystent Nieruchomości",
+  "version": "1.0.0",
+  "description": "AI-powered assistant for browsing real estate listings on otodom.pl and gratka.pl. Get instant summaries, commute times, and smart overviews.",
+  "permissions": [
+    "contextMenus",
+    "activeTab",
+    "storage",
+    "scripting",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "https://www.otodom.pl/*",
+    "https://otodom.pl/*",
+    "https://www.gratka.pl/*",
+    "https://gratka.pl/*",
+    "https://www.olx.pl/*",
+    "https://olx.pl/*",
+    "https://www.domy.pl/*",
+    "https://domy.pl/*",
+    "https://www.morizon.pl/*",
+    "https://morizon.pl/*",
+    "https://www.domiporta.pl/*",
+    "https://domiporta.pl/*",
+    "https://www.sprzedajemy.pl/*",
+    "https://sprzedajemy.pl/*",
+    "https://www.adresowo.pl/*",
+    "https://adresowo.pl/*",
+    "https://www.nieruchomosci-online.pl/*",
+    "https://nieruchomosci-online.pl/*",
+    "https://www.rynekpierwotny.pl/*",
+    "https://rynekpierwotny.pl/*",
+    "https://www.gethome.pl/*",
+    "https://gethome.pl/*",
+    "https://www.adradar.pl/*",
+    "https://adradar.pl/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.otodom.pl/*",
+        "https://otodom.pl/*",
+        "https://www.gratka.pl/*",
+        "https://gratka.pl/*",
+        "https://www.olx.pl/*",
+        "https://olx.pl/*",
+        "https://www.domy.pl/*",
+        "https://domy.pl/*",
+        "https://www.morizon.pl/*",
+        "https://morizon.pl/*",
+        "https://www.domiporta.pl/*",
+        "https://domiporta.pl/*",
+        "https://www.sprzedajemy.pl/*",
+        "https://sprzedajemy.pl/*",
+        "https://www.adresowo.pl/*",
+        "https://adresowo.pl/*",
+        "https://www.nieruchomosci-online.pl/*",
+        "https://nieruchomosci-online.pl/*",
+        "https://www.rynekpierwotny.pl/*",
+        "https://rynekpierwotny.pl/*",
+        "https://www.gethome.pl/*",
+        "https://gethome.pl/*",
+        "https://www.adradar.pl/*",
+        "https://adradar.pl/*"
+      ],
+      "js": ["content.js"],
+      "css": ["overlay.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

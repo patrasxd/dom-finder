@@ -1,0 +1,447 @@
+/* ============================================================
+   DOM FINDER — Overlay & Floating Button Styles
+   Premium glassmorphic design injected into real estate sites
+   ============================================================ */
+
+/* --- CSS Variables --- */
+:root {
+  --df-primary: #6366f1;
+  --df-primary-light: #818cf8;
+  --df-accent: #06b6d4;
+  --df-bg-dark: rgba(15, 15, 30, 0.92);
+  --df-bg-card: rgba(30, 30, 60, 0.85);
+  --df-text: #e8e8f0;
+  --df-text-muted: #9ca3af;
+  --df-border: rgba(99, 102, 241, 0.25);
+  --df-success: #22c55e;
+  --df-warning: #f59e0b;
+  --df-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(99, 102, 241, 0.15);
+  --df-radius: 16px;
+  --df-font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* --- Overlay Panel --- */
+#dom-finder-overlay {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 420px;
+  max-height: 85vh;
+  background: var(--df-bg-dark);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius);
+  box-shadow: var(--df-shadow);
+  font-family: var(--df-font);
+  color: var(--df-text);
+  z-index: 2147483647;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateX(30px) scale(0.95);
+  pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#dom-finder-overlay.df-visible {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+#dom-finder-overlay.df-closing {
+  opacity: 0;
+  transform: translateX(30px) scale(0.95);
+  pointer-events: none;
+}
+
+#dom-finder-overlay.df-minimized .df-overlay-body {
+  max-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* --- Overlay Header --- */
+.df-overlay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.1));
+  border-bottom: 1px solid var(--df-border);
+  cursor: grab;
+  user-select: none;
+}
+
+.df-overlay-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: linear-gradient(135deg, var(--df-primary-light), var(--df-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.df-logo {
+  font-size: 20px;
+  -webkit-text-fill-color: initial;
+}
+
+.df-overlay-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.df-overlay-actions button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--df-text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.df-overlay-actions button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--df-text);
+}
+
+.df-btn-close:hover {
+  background: rgba(239, 68, 68, 0.3) !important;
+  color: #ef4444 !important;
+}
+
+/* --- Overlay Body --- */
+.df-overlay-body {
+  padding: 18px;
+  overflow-y: auto;
+  max-height: calc(85vh - 60px);
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  scrollbar-width: thin;
+  scrollbar-color: var(--df-primary) transparent;
+}
+
+.df-overlay-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.df-overlay-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.df-overlay-body::-webkit-scrollbar-thumb {
+  background: var(--df-primary);
+  border-radius: 10px;
+}
+
+/* --- Loading State --- */
+.df-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 16px;
+}
+
+.df-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(99, 102, 241, 0.2);
+  border-top-color: var(--df-primary);
+  border-radius: 50%;
+  animation: df-spin 0.8s linear infinite;
+}
+
+@keyframes df-spin {
+  to { transform: rotate(360deg); }
+}
+
+.df-loading p {
+  font-size: 14px;
+  color: var(--df-text-muted);
+  margin: 0;
+  animation: df-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes df-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* --- Quick Facts --- */
+.df-facts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.df-fact {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--df-bg-card);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 13px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.df-fact-full {
+  grid-column: 1 / -1;
+}
+
+.df-fact:hover {
+  transform: translateY(-2px);
+  background: rgba(40, 40, 70, 0.9);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.df-fact-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.df-fact-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.df-fact-text strong {
+  font-size: 10px;
+  color: var(--df-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.df-fact-text span {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--df-text);
+}
+
+/* --- Section Titles --- */
+.df-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--df-text);
+}
+
+.df-model-badge {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--df-primary-light);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+/* --- AI Text --- */
+.df-ai-text {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--df-text);
+  padding: 14px 16px;
+  background: var(--df-bg-card);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  margin-bottom: 16px;
+}
+
+.df-ai-text strong {
+  color: var(--df-primary-light);
+  font-weight: 600;
+}
+
+.df-ai-text .df-heading {
+  font-size: 13px;
+  font-weight: 700;
+  margin: 14px 0 6px;
+  color: var(--df-accent);
+}
+
+.df-ai-text h3.df-heading:first-child,
+.df-ai-text h4.df-heading:first-child {
+  margin-top: 0;
+}
+
+/* --- Google Maps Embed --- */
+.df-maps-embed-container {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  background: var(--df-bg-card);
+}
+
+.df-maps-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 12px;
+}
+
+.df-maps-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--df-bg-card);
+  color: var(--df-text-muted);
+  font-size: 12px;
+}
+
+.df-maps-info {
+  margin-bottom: 10px;
+}
+
+.df-maps-route {
+  font-size: 11px;
+  color: var(--df-text-muted);
+  line-height: 1.4;
+  display: block;
+  padding: 6px 10px;
+  background: rgba(6, 182, 212, 0.06);
+  border-radius: 8px;
+  border: 1px solid rgba(6, 182, 212, 0.1);
+}
+
+/* --- Commute / Maps Link --- */
+.df-maps-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(99, 102, 241, 0.08));
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  border-radius: 12px;
+  color: var(--df-text);
+  text-decoration: none;
+  font-size: 13px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.df-maps-link:hover {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(99, 102, 241, 0.15));
+  border-color: var(--df-accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.2);
+}
+
+.df-maps-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.df-arrow {
+  margin-left: auto;
+  font-size: 16px;
+  color: var(--df-accent);
+  transition: transform 0.2s ease;
+}
+
+.df-maps-link:hover .df-arrow {
+  transform: translateX(3px);
+}
+
+/* --- Error State --- */
+.df-error {
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.df-error-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.df-error p {
+  font-size: 14px;
+  color: var(--df-warning);
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+
+.df-error-hint {
+  font-size: 12px;
+  color: var(--df-text-muted) !important;
+}
+
+/* --- Floating Button --- */
+#dom-finder-float-btn {
+  position: absolute;
+  z-index: 2147483646;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, var(--df-primary), #4f46e5);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--df-font);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(-5px) scale(0.9);
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4), 0 0 20px rgba(99, 102, 241, 0.15);
+  white-space: nowrap;
+}
+
+#dom-finder-float-btn.df-float-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+#dom-finder-float-btn:hover {
+  background: linear-gradient(135deg, var(--df-primary-light), var(--df-primary));
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5), 0 0 30px rgba(99, 102, 241, 0.2);
+}
+
+#dom-finder-float-btn span {
+  pointer-events: none;
+}
+
+/* --- Responsive --- */
+@media (max-width: 500px) {
+  #dom-finder-overlay {
+    width: calc(100vw - 20px);
+    right: 10px;
+    top: 10px;
+  }
+}
