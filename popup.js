@@ -11,9 +11,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggleKeyBtn = document.getElementById('toggle-key');
   const btnSave = document.getElementById('btn-save');
   const statusEl = document.getElementById('status');
+  const aiToggle = document.getElementById('ai-toggle');
+  const aiToggleDesc = document.getElementById('ai-toggle-desc');
+  const aiDependentFields = document.querySelectorAll('.ai-dependent');
+
+  // --- Update AI-dependent fields visibility ---
+  function updateAIDependentFields(enabled) {
+    aiDependentFields.forEach(field => {
+      if (enabled) {
+        field.classList.remove('disabled');
+      } else {
+        field.classList.add('disabled');
+      }
+    });
+
+    if (enabled) {
+      aiToggleDesc.textContent = 'Analiza oferty przez sztuczną inteligencję';
+      aiToggleDesc.classList.remove('ai-off');
+    } else {
+      aiToggleDesc.textContent = 'Wyłączony — tylko pobieranie danych ze strony';
+      aiToggleDesc.classList.add('ai-off');
+    }
+  }
 
   // --- Load saved settings ---
-  chrome.storage.sync.get(['groqApiKey', 'destinationAddress', 'selectedModel'], (result) => {
+  chrome.storage.sync.get(['groqApiKey', 'destinationAddress', 'selectedModel', 'aiAgentEnabled'], (result) => {
     if (result.groqApiKey) {
       apiKeyInput.value = result.groqApiKey;
     }
@@ -23,7 +45,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (result.selectedModel) {
       modelSelect.value = result.selectedModel;
     }
-    updateStatus(result.groqApiKey);
+
+    // AI toggle — default to true if not set
+    const aiEnabled = result.aiAgentEnabled !== false;
+    aiToggle.checked = aiEnabled;
+    updateAIDependentFields(aiEnabled);
+    updateStatus(result.groqApiKey, aiEnabled);
+  });
+
+  // --- AI Toggle change handler ---
+  aiToggle.addEventListener('change', () => {
+    updateAIDependentFields(aiToggle.checked);
+    updateStatus(apiKeyInput.value.trim(), aiToggle.checked);
   });
 
   // --- Toggle API key visibility ---
@@ -44,11 +77,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const apiKey = apiKeyInput.value.trim();
     const destination = destinationInput.value.trim() || 'Warszawa Centrum';
     const model = modelSelect.value;
+    const aiEnabled = aiToggle.checked;
 
     chrome.storage.sync.set({
       groqApiKey: apiKey,
       destinationAddress: destination,
-      selectedModel: model
+      selectedModel: model,
+      aiAgentEnabled: aiEnabled
     }, () => {
       // Show success state
       const btnText = btnSave.querySelector('.btn-text');
@@ -57,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btnSuccess.style.display = 'inline';
       btnSave.classList.add('saved');
 
-      updateStatus(apiKey);
+      updateStatus(apiKey, aiEnabled);
 
       // Reset button after 2 seconds
       setTimeout(() => {
@@ -69,11 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --- Update status indicator ---
-  function updateStatus(apiKey) {
+  function updateStatus(apiKey, aiEnabled) {
     const dot = statusEl.querySelector('.status-dot');
     const text = statusEl.querySelector('span');
 
-    if (apiKey && apiKey.startsWith('gsk_')) {
+    if (!aiEnabled) {
+      dot.className = 'status-dot warning';
+      text.textContent = 'Tryb bez AI — tylko dane ze strony';
+    } else if (apiKey && apiKey.startsWith('gsk_')) {
       dot.className = 'status-dot';
       text.textContent = 'Gotowy do użycia';
     } else if (apiKey) {

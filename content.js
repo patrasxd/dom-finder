@@ -787,10 +787,17 @@
 
     // AI Summary
     const aiSummaryEl = contentEl.querySelector('.df-ai-summary');
-    aiSummaryEl.innerHTML = `
-      <div class="df-section-title">🤖 AI Overview <span class="df-model-badge">${aiResponse.model || ''}</span></div>
-      <div class="df-ai-text">${formatAIText(aiResponse.summary)}</div>
-    `;
+    if (aiResponse.aiDisabled) {
+      aiSummaryEl.innerHTML = `
+        <div class="df-section-title" style="opacity:0.6;">🤖 Agent AI <span class="df-model-badge" style="background:rgba(245,158,11,0.2);color:#f59e0b;">wyłączony</span></div>
+        <div class="df-ai-text" style="color:#9ca3af;font-size:12px;">Włącz Agent AI w ustawieniach rozszerzenia, aby uzyskać analizę oferty.</div>
+      `;
+    } else {
+      aiSummaryEl.innerHTML = `
+        <div class="df-section-title">🤖 AI Overview <span class="df-model-badge">${aiResponse.model || ''}</span></div>
+        <div class="df-ai-text">${formatAIText(aiResponse.summary)}</div>
+      `;
+    }
 
     // Commute section
     const commuteEl = contentEl.querySelector('.df-commute-section');
@@ -856,6 +863,18 @@
     floatingBtn.classList.add('df-float-btn'); // For our own safety checks
     floatingBtn.innerHTML = '🏠 <span>Podsumowanie AI</span>';
     floatingBtn.title = 'Dom Finder — Podsumowanie oferty ze sztuczną inteligencją';
+
+    // Update button label based on AI setting
+    chrome.storage.sync.get(['aiAgentEnabled'], (result) => {
+      const aiEnabled = result.aiAgentEnabled !== false;
+      const labelSpan = floatingBtn.querySelector('span');
+      if (labelSpan) {
+        labelSpan.textContent = aiEnabled ? 'Podsumowanie AI' : 'Podsumowanie';
+      }
+      floatingBtn.title = aiEnabled
+        ? 'Dom Finder — Podsumowanie oferty ze sztuczną inteligencją'
+        : 'Dom Finder — Podsumowanie danych oferty';
+    });
     
     // Force inline styles just in case the site's CSS is extremely aggressive
     floatingBtn.style.cssText = `
@@ -1239,8 +1258,21 @@
         console.warn('[Dom Finder] Nie udało się pobrać strony oferty:', err.message);
         // Continue with card data only
       }
-      updateLoadingText('Analizuję ofertę z AI...');
     }
+
+    // Check if AI Agent is enabled
+    const settings = await new Promise(resolve => {
+      chrome.storage.sync.get(['aiAgentEnabled'], resolve);
+    });
+    const aiEnabled = settings.aiAgentEnabled !== false;
+
+    if (!aiEnabled) {
+      // AI disabled — show only scraped data
+      displayResults(enrichedData, { aiDisabled: true, destination: '' });
+      return;
+    }
+
+    updateLoadingText('Analizuję ofertę z AI...');
 
     try {
       const response = await chrome.runtime.sendMessage({

@@ -81,11 +81,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.action === 'getSettings') {
-    chrome.storage.sync.get(['groqApiKey', 'destinationAddress', 'selectedModel'], (result) => {
+    chrome.storage.sync.get(['groqApiKey', 'destinationAddress', 'selectedModel', 'aiAgentEnabled'], (result) => {
       sendResponse({
         apiKey: result.groqApiKey || '',
         destination: result.destinationAddress || 'Warszawa Centrum',
-        model: result.selectedModel || 'llama-3.3-70b-versatile'
+        model: result.selectedModel || 'llama-3.3-70b-versatile',
+        aiAgentEnabled: result.aiAgentEnabled !== false
       });
     });
     return true;
